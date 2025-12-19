@@ -19,12 +19,12 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("☀️ Solar PV Calculator")
-st.write("**solar calculation to determine the energy output and panel**")
+st.write("**Minimalist & Professional Edition**")
 
 # ============================================================
 # STEP 1 — FRONT SIDE ENERGY (Efront)
 # ============================================================
-st.header("🔶 STEP 1 — Energy Output (monofacial)")
+st.header("🔶 STEP 1 — Front-Side Energy Output (Efront)")
 
 # ----------------------- FTEMP -----------------------
 st.subheader("1️⃣ Temperature Factor (ftemp)")
@@ -68,7 +68,7 @@ eta_inv   = factor("Inverter Efficiency", 0.97)
 Efront = (PSH * PASTC * fmm * ftemp * fclean *
           fdegrad * fsunshade * eta_cable * eta_inv) / area
 
-st.success(f"⚡ Energy output (Eout) = **{Eout:.2f} Wh/m²**")
+st.success(f"⚡ Front-side Energy (Efront) = **{Efront:.2f} Wh/m²**")
 
 # ============================================================
 # STEP 2 — BIFACIAL CALCULATION
@@ -78,19 +78,19 @@ st.header("🔷 STEP 2 — Bifacial Energy Contribution")
 use_bifacial = st.checkbox("Enable Bifacial Panel?", value=False)
 
 if use_bifacial:
-    bifaciality = st.number_input("Bifaciality Efficiency ", value=0.80)
-    albedo = st.number_input(" Albedo factor ", value=0.12)
+    bifaciality = st.number_input("Bifaciality Efficiency (e.g. 0.80)", value=0.80)
+    albedo = st.number_input("Ground Albedo (e.g. sawit ≈ 0.12)", value=0.12)
 
-    Erear = Eout * albedo * bifaciality
-    Etotal = Eout + Erear
-    gain = (Erear / Eout) * 100
+    Erear = Efront * albedo * bifaciality
+    Etotal = Efront + Erear
+    gain = (Erear / Efront) * 100
 
     st.success(f"🔁 Rear Energy = {Erear:.2f} Wh/m²")
     st.success(f"⚡ Total Bifacial Energy = {Etotal:.2f} Wh/m²")
     st.info(f"📈 Bifacial Gain ≈ {gain:.2f} %")
 else:
-    Etotal = Eout
-    st.info("Monofacial mode: Total Energy = Energy output only")
+    Etotal = Efront
+    st.info("Monofacial mode: Total Energy = Front Energy only")
 
 st.markdown("---")
 
@@ -123,4 +123,3 @@ elif N_port > N_land:
     st.success("✔ Portrait recommended")
 else:
     st.info("Both orientations equal")
-
