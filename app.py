@@ -123,3 +123,31 @@ elif N_port > N_land:
     st.success("✔ Portrait recommended")
 else:
     st.info("Both orientations equal")
+
+# ============================================================
+# STEP 4 — INVERTER SIZING
+# ============================================================
+st.header("🔷 STEP 4 — Inverter Sizing")
+
+# Total number of panels
+N_panels = st.number_input("Total Number of Panels", value=10000)
+
+# Panel rated power (front-side)
+P_panel = st.number_input("Panel Rated Power Pmax (W)", value=605.0)
+
+# DC/AC ratio
+dc_ac_ratio = st.number_input("DC/AC Ratio", value=1.20)
+
+# Inverter nominal power
+P_inv_rated = st.number_input("Single Inverter Rated Power (MW)", value=5.0)
+
+# ---- Calculations ----
+P_DC_total = (N_panels * P_panel) / 1e6   # MW
+P_AC_required = P_DC_total / dc_ac_ratio # MW
+N_inverter = math.ceil(P_AC_required / P_inv_rated)
+
+# ---- Display ----
+st.success(f"🔌 Total DC Power = {P_DC_total:.3f} MW")
+st.success(f"⚡ Required AC Inverter Power = {P_AC_required:.3f} MW")
+st.success(f"🏭 Number of Inverters Required = {N_inverter}")
+
